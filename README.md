@@ -2,7 +2,7 @@
 The solutions to [advent of code 2021](https://adventofcode.com/2021), solved using PHP 8.1. By [James Thatcher](http://github.com/jthatch)
 
 ### Solutions 🥳🎉
-> 🎄 [Day 1](/src/Day1.php)
+> 🎄 [Day 1](/src/Day1.php) 🎅 [Day 2](/src/Day2.php)
 ### Commands
 _Note: checkout the code then run `make run`. The docker and composer libraries will auto install._  
 
@@ -38,6 +38,6 @@ _Note: The Makefile reads the [/src](/src) directory to find the most recent Day
 
 IDE settings:
 - `10000` - xdebug port 
-- `aoc-2020` - PHP_IDE_CONFIG (what you put in PHPStorm -> settings -> debug -> server -> name)
+- `aoc-2021` - PHP_IDE_CONFIG (what you put in PHPStorm -> settings -> debug -> server -> name)
 - `/app` - absolute path on the server  
 - see [xdebug.ini](/xdebug.ini) if you're stuck

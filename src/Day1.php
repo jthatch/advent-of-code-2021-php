@@ -13,7 +13,7 @@ class Day1 extends DayBehaviour
     {
         $depthIncreases = 0;
 
-        collect(array_map('intval', $this->input))
+        collect($this->input)
             ->sliding(2)
             ->eachSpread(function ($previous, $current) use (&$depthIncreases): void {
                 if ($current > $previous) {
@@ -30,7 +30,7 @@ class Day1 extends DayBehaviour
 
         /** @var Collection|null $previous */
         $previous = null;
-        collect(array_map('intval', $this->input))
+        collect($this->input)
             ->sliding(3)
             ->each(function (Collection $current) use (&$sumIncreases, &$previous): void {
                 if ($previous && $current->sum() > $previous->sum()) {
