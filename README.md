@@ -14,6 +14,7 @@ functions and aimed for maximum efficiency, this year I'm using the excellent
 array manipulation without effort, and not losing much in the way of performance. Although as you'll see, I still love
 a good recursive function 😉
 
+![day runner in action](/aoc-2021-jthatch-in-action.png "AOC 2021 PHP by James Thatcher")
 
 ### Commands
 _Note: checkout the code then run `make run`. The docker and composer libraries will auto install._  
