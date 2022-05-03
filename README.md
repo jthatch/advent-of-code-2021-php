@@ -21,9 +21,6 @@ _Note: checkout the code then run `make run`. The docker and composer libraries 
 **Solve all days puzzles**  
 `make run`
 
-**Solve all days puzzles using the PEST testing framework**  
-`make tests`
-
 **Solve an individual days puzzles**  
 `make run day={N}` e.g. `make run day=13`
 
