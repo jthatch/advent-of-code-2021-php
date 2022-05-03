@@ -85,9 +85,7 @@ class Day3 extends DayBehaviour
 
         // keep only rows with the matching bit in the position
         $input = collect($input)
-            ->filter(function ($row) use ($position, $ratingCriteriaBit) {
-                return (int) $row[$position] === $ratingCriteriaBit;
-            })
+            ->filter(fn ($row) => (int) $row[$position] === $ratingCriteriaBit)
             ->toArray();
 
         // call ourselves recursively with the new input
