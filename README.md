@@ -2,7 +2,19 @@
 The solutions to [advent of code 2021](https://adventofcode.com/2021), solved using PHP 8.1. By [James Thatcher](http://github.com/jthatch)
 
 ### Solutions 🥳🎉
-> 🎄 [Day 1](/src/Day1.php) 🎅 [Day 2](/src/Day2.php)
+> 🎄 [Day 1](/src/Day1.php) 🎅 [Day 2](/src/Day2.php) ☃️ [Day 3](/src/Day3.php)
+>
+
+### About
+My attempts at tacking the awesome challenges at [Advent of Code 2021](https://adventofcode.com/2021/day/1) using PHP 8.1.
+
+Unlike my solutions for [AOC 2020](https://github.com/jthatch/advent-of-code-php-2020), where I used `array_*` 
+functions and aimed for maximum efficiency, this year I'm using the excellent 
+[Collections](https://laravel.com/docs/9.x/collections) package that comes with Laravel. This lets me do common
+array manipulation without effort, and not losing much in the way of performance. Although as you'll see, I still love
+a good recursive function 😉
+
+
 ### Commands
 _Note: checkout the code then run `make run`. The docker and composer libraries will auto install._  
 
