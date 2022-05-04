@@ -2,7 +2,7 @@
 The solutions to [advent of code 2021](https://adventofcode.com/2021), solved using PHP 8.1. By [James Thatcher](http://github.com/jthatch)
 
 ### Solutions 🥳🎉
-> 🎄 [Day 1](/src/Day1.php) 🎅 [Day 2](/src/Day2.php) ☃️ [Day 3](/src/Day3.php)
+> 🎄 [Day 1](/src/Day1.php) 🎅 [Day 2](/src/Day2.php) ☃️ [Day 3](/src/Day3.php) 🦌 [Day 4](/src/Day4.php)
 >
 
 ### About
