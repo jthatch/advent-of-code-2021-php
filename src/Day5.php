@@ -66,8 +66,8 @@ class Day5 extends DayBehaviour
             $lastY  = null;
             $lastX  = null;
             while (!empty($xRange) || !empty($yRange)) {
-                $x = (int) (array_shift($xRange) ?? $lastX);
-                $y = (int) (array_shift($yRange) ?? $lastY);
+                $x = (int) (array_pop($xRange) ?? $lastX);
+                $y = (int) (array_pop($yRange) ?? $lastY);
                 $map[$y][$x] ??= 0;
                 ++$map[$y][$x];
                 $lastX = $x;
