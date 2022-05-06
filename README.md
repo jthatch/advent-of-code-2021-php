@@ -2,7 +2,7 @@
 The solutions to [advent of code 2021](https://adventofcode.com/2021), solved using PHP 8.1. By [James Thatcher](http://github.com/jthatch)
 
 ### Solutions 🥳🎉
-> 🎄 [Day 1](/src/Day1.php) 🎅 [Day 2](/src/Day2.php) ☃️ [Day 3](/src/Day3.php) 🦌 [Day 4](/src/Day4.php)
+> 🎄 [Day 1](/src/Day1.php) 🎅 [Day 2](/src/Day2.php) ☃️ [Day 3](/src/Day3.php) 🦌 [Day 4](/src/Day4.php) 🍪 [Day 5](/src/Day5.php)
 >
 
 ### About
@@ -33,7 +33,6 @@ _Auto detects what current Day you are on and will create the next (only if the 
 ```shell
 make new
 # Created new file: src/Day17.php
-# Created new file: tests/Day17Test.php
 ```
 
 **Fetch the next days input from the server.**  
