@@ -11,33 +11,26 @@ class Day5 extends DayBehaviour
 {
     public function solvePart1(): ?int
     {
-        $map = $this->buildMap(input: $this->input, removeDiagonals: true);
-
-        return collect($map)
-            ->sum(
-                // return points with more than 1 overlap
+        return $this->buildMap(input: $this->input, removeDiagonals: true)
+            ->sum( // return points with more than 1 overlap
                 fn ($pos): int => collect($pos)->filter(fn (int $p) => $p > 1)->count()
             );
     }
 
     public function solvePart2(): ?int
     {
-        $map = $this->buildMap(input: $this->input);
-
-        return collect($map)
-            ->sum(
-                fn ($pos): int => collect($pos)->filter(fn (int $p) => $p > 1)->count()
-            );
+        return $this->buildMap(input: $this->input)
+            ->sum(fn ($pos): int => collect($pos)->filter(fn (int $p) => $p > 1)->count());
     }
 
     /**
      * @param array<string> $input
      * @param bool          $removeDiagonals
      *
-     * @return array<int, array<int>>
+     * @return Collection<int, non-empty-array<int, int>>
      * @noinspection PrintfScanfArgumentsInspection
      */
-    protected function buildMap(array $input, bool $removeDiagonals = false): array
+    protected function buildMap(array $input, bool $removeDiagonals = false): Collection
     {
         $map = [];
 
@@ -68,6 +61,6 @@ class Day5 extends DayBehaviour
                 }
             });
 
-        return $map;
+        return collect($map);
     }
 }
