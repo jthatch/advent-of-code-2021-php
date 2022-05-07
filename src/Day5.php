@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App;
 
 use App\Contracts\DayBehaviour;
+use Illuminate\Support\Collection;
 
 class Day5 extends DayBehaviour
 {
@@ -39,41 +40,34 @@ class Day5 extends DayBehaviour
      * @param bool          $removeDiagonals
      *
      * @return array<int, array<int>>
+     * @noinspection PrintfScanfArgumentsInspection
      */
     protected function buildMap(array $input, bool $removeDiagonals = false): array
     {
-        $map        = [];
-        $collection = collect($input)
-            ->map(function ($item) {
-                preg_match_all('/(\d+)/', $item, $matches);
+        $map = [];
 
-                return [
-                    (int) $matches[1][0], // x1
-                    (int) $matches[1][1], // y1
-                    (int) $matches[1][2], // x2
-                    (int) $matches[1][3], // y2
-                ];
+        collect($input)
+            ->map(fn (string $line) => sscanf($line, '%d,%d -> %d,%d'))
+            ->when(
+                $removeDiagonals,
+                fn (Collection $collection) => $collection->filter(
+                    // horizontals are when x1 = x2 or y1 = y2
+                    fn (array $pos) => $pos[0] === $pos[2] || $pos[1] === $pos[3]
+                )
+            )
+            ->eachSpread(function (int $x1, int $y1, int $x2, int $y2) use (&$map): void {
+                $xRange = range($x1, $x2);
+                $yRange = range($y1, $y2);
+                // pad arrays to the same size, repeating last number
+                $xRange = array_pad($xRange, count($yRange), $xRange[count($xRange) - 1]);
+                $yRange = array_pad($yRange, count($xRange), $yRange[count($yRange) - 1]);
+                while (!empty($xRange) || !empty($yRange)) {
+                    $x = (int) array_pop($xRange);
+                    $y = (int) array_pop($yRange);
+                    $map[$y][$x] ??= 0;
+                    ++$map[$y][$x];
+                }
             });
-
-        if ($removeDiagonals) {
-            // horizontals are when x1 = x2 or y1 = y2
-            $collection = $collection->filter(fn ($pos) => $pos[0] === $pos[2] || $pos[1] === $pos[3]);
-        }
-
-        $collection->eachSpread(function (int $x1, int $y1, int $x2, int $y2) use (&$map): void {
-            $xRange = range($x1, $x2);
-            $yRange = range($y1, $y2);
-            $lastY  = null;
-            $lastX  = null;
-            while (!empty($xRange) || !empty($yRange)) {
-                $x = (int) (array_pop($xRange) ?? $lastX);
-                $y = (int) (array_pop($yRange) ?? $lastY);
-                $map[$y][$x] ??= 0;
-                ++$map[$y][$x];
-                $lastX = $x;
-                $lastY = $y;
-            }
-        });
 
         return $map;
     }
