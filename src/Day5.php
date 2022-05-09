@@ -50,12 +50,10 @@ class Day5 extends DayBehaviour
             ->eachSpread(function (int $x1, int $y1, int $x2, int $y2) use (&$map): void {
                 $xRange = range($x1, $x2);
                 $yRange = range($y1, $y2);
-                // pad arrays to the same size, repeating last number
-                $xRange = array_pad($xRange, count($yRange), $xRange[count($xRange) - 1]);
-                $yRange = array_pad($yRange, count($xRange), $yRange[count($yRange) - 1]);
                 while (!empty($xRange) || !empty($yRange)) {
-                    $x = (int) array_pop($xRange);
-                    $y = (int) array_pop($yRange);
+                    // fall back to last known number if range finishes early. occurs for horizontal (x) and vertical (y) lines
+                    $x = (int) (array_pop($xRange) ?? $x ?? null);
+                    $y = (int) (array_pop($yRange) ?? $y ?? null);
                     $map[$y][$x] ??= 0;
                     ++$map[$y][$x];
                 }
