@@ -105,7 +105,7 @@ ifndef aocCookie
 	@echo -e "Then set the environmental variable AOC_COOKIE. e.g. export AOC_COOKIE=53616c7465645f5f2b44c4d4742765e14...\n"
 else
 	@echo -e "Fetching latest input using day=$(latestDay) AOC_COOKIE=$(aocCookie)"
-	@curl -s --location --request GET 'https://adventofcode.com/2021/day/$(latestDay)/input' --header 'Cookie: session=$(aocCookie)' -o ./input/day$(latestDay).txt && echo "./src/day$(latestDay).txt downloaded" || echo "error downloading"
+	@curl -s --location --request GET 'https://adventofcode.com/2021/day/$(latestDay)/input' --header 'Cookie: session=$(aocCookie)' -o ./input/day$(latestDay).txt && echo "./input/day$(latestDay).txt downloaded" || echo "error downloading"
 endif
 define DAY_TEMPLATE
 <?php\n\ndeclare(strict_types=1);\n\nnamespace App;\n\nuse App\Contracts\DayBehaviour;\n\nclass Day$(nextDay) extends DayBehaviour\n{\n    public function solvePart1(): ?int\n    {\n        // TODO: Implement solvePart1() method.\n        return null;\n    }\n\n    public function solvePart2(): ?int\n    {\n        // TODO: Implement solvePart2() method.\n        return null;\n    }\n}\n

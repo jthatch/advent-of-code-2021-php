@@ -32,11 +32,15 @@ _Note: checkout the code then run `make run`. The docker and composer libraries 
 _Auto detects what current Day you are on and will create the next (only if the files don't exist)_
 ```shell
 make new
-# Created new file: src/Day17.php
+# Created new file: src/Day8.php
 ```
 
 **Fetch the next days input from the server.**  
-`make get-input`  
+```shell
+make get-input
+# Fetching latest input using day=8 AOC_COOKIE=53616c7465645f5f539435aCL1P
+./input/day8.txt downloaded
+```  
 _Note: The Makefile reads the [/src](/src) directory to find the most recent DayN.php file. If you had just completed `Day1.php` you would create a `Day2.php` (by running `make new`) and then run this command to fetch `/input/day2.txt`_
 
 **Use XDebug**  
