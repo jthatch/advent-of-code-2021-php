@@ -9,76 +9,53 @@ use Illuminate\Support\Collection;
 
 class Day6 extends DayBehaviour
 {
-    protected array $days = [];
-
     public function solvePart1(): ?int
     {
-        $input = array_map('intval', explode(',', $this->example()[0]));
-        // $input = array_map('intval', explode(',', $this->input[0]));
+        $input = array_map('intval', explode(',', $this->input[0]));
 
-        return $this->fishTraverse(collect($input), 80);
-        // return $this->fishTraverse(collect([3,4]), 18);
+        return $this->fishTraverseUsingArray(collect($input), 80);
     }
 
+    /**
+     * This approach works by keeping track of the number of fish of a given age.
+     *
+     * @return int|null
+     */
     public function solvePart2(): ?int
     {
-        $input = array_map('intval', explode(',', $this->example()[0]));
-        // $input = array_map('intval', explode(',', $this->input[0]));
+        $input = array_map('intval', explode(',', $this->input[0]));
 
-        $count = count($input);
-        // $count = 0;
-        $fishes = array_count_values($input);
-        foreach ($fishes as $fishAge => $total) {
-            // foreach($input as $fishAge) {
-            // $count++;
-            $totalForFish = $this->fishTraverseNew($fishAge, 256, 0, 0);
-            $totalForFish *= $total;
-            $count += $totalForFish;
+        // build a collection of $fish [age => fishCount] key/values, 0-8
+        /** @var Collection<array<int, int>> $fish */
+        $fish = collect()->pad(9, 0)
+            ->replace(array_count_values($input));
+
+        // as each day progresses, the fishCount of age n are set to n+1
+        // to handle the creation of new fish, the aged 0 fish are added to the age 6 fish
+        $days = 256;
+        while ($days-- > 0) {
+            $fish->transform(
+                // set fish of age 0 to those of age 1 etc… and spawn new fish for all those aged 6
+                fn (int $c, int $age): int => $fish->get($age + 1 > 8 ? 0 : $age + 1) + (6 === $age
+                        ? $fish->get(0) // add the new fish
+                        : 0)
+            );
         }
 
-        /*foreach($this->days as $day => $fish) {
-            printf("days: %d count: %d fish: %s\n", $day, count($fish), implode(",", $fish));
-        }*/
-
-        return $count;
-
-        /* return $count;
-         //$count = count($input);
-         $count = 0;
-         foreach ($input as $fish) {
-             $fishCount = $this->howManyNewFish($fish, 18, 0);
-             $count += $fishCount;
-         }
-
-         return (int) $count;*/
-        // return $this->fishTraverseNew($input, 256);
+        return (int) $fish->sum();
     }
 
-    public function fishTraverseNew(int $fishAge, int $days, int $children = 0, int $newLife = 0): int
+    /**
+     * This method is useful for seeing what happens but is not memory efficient.
+     *
+     * @param Collection $fish
+     * @param int        $days
+     *
+     * @return int
+     */
+    public function fishTraverseUsingArray(Collection $fish, int $days): int
     {
-        // $this->days[$days][] = $fishAge;
-        // printf("days: %d fish: %d children: %d newlife: %d\n", $days, $fishAge, $children, $newLife);
-        if (0 === $days) {
-            return $newLife + $children;
-        }
-
-        --$days;
-
-        if (0 === $fishAge) {
-            $fishAge = 6;
-            ++$newLife;
-            $children += $this->fishTraverseNew(8, $days, 0, 0);
-        } else {
-            --$fishAge;
-        }
-
-        return $this->fishTraverseNew($fishAge, $days, $children, $newLife);
-    }
-
-    public function fishTraverse(Collection $fish, int $days): int
-    {
-        printf("day: %d count: %d fish: %s\n", $days, $fish->count(), $fish->join(','));
-
+        // printf("day: %d count: %d fish: %s\n", $days, $fish->count(), $fish->join(','));
         if (0 === $days) {
             return $fish->count();
         }
@@ -96,12 +73,6 @@ class Day6 extends DayBehaviour
             })
             ->push(...$append);
 
-        return $this->fishTraverse($fish, --$days);
-    }
-
-    protected function example(): array
-    {
-        return ['3,4,3,1,2'];
-        // return ['3,4'];
+        return $this->fishTraverseUsingArray($fish, --$days);
     }
 }
