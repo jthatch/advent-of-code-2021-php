@@ -40,7 +40,6 @@ class Day7 extends DayBehaviour
         $positions = collect()->range($input[0], $input[count($input) - 1]);
 
         return (int) $positions
-            // this histogram is based on the sum of all numbers between crab and target position
             ->map(fn (int $from) => $crabs->reduce(fn (int $carry, int $to) => $deltaReduce($from, $to) + $carry, 0))
             ->sort()
             ->first();
