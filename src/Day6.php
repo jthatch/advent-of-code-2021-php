@@ -27,8 +27,7 @@ class Day6 extends DayBehaviour
 
         // build a collection of $fish [age => fishCount] key/values, 0-8
         /** @var Collection<array<int, int>> $fish */
-        $fish = collect()->pad(9, 0)
-            ->replace(array_count_values($input));
+        $fish = collect()->pad(9, 0)->replace(array_count_values($input));
 
         // as each day progresses, the fishCount of age (n) are set to (n)+1
         // to handle the creation of new fish, the aged 0 fish are added to the age 8 fish
@@ -38,8 +37,8 @@ class Day6 extends DayBehaviour
                 // decrease the age of each fish by negatively rotating the fishCount down one, e.g. age 1 fish move to age 0 etc…
                 // for age 6 fish we spawn (n) new fish (n) = age 0 fish
                 fn ($c, int $age): int => $fish->get(++$age > 8 ? 0 : $age) + (7 === $age
-                        ? $fish->get(0) // every fish age 0 will spawn a new fish age 8
-                        : 0)
+                    ? $fish->get(0) // every fish age 0 will spawn a new fish age 8
+                    : 0)
             );
         }
 
