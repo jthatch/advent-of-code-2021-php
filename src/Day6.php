@@ -30,15 +30,15 @@ class Day6 extends DayBehaviour
         $fish = collect()->pad(9, 0)
             ->replace(array_count_values($input));
 
-        // as each day progresses, the fishCount of age n are set to n+1
+        // as each day progresses, the fishCount of age (n) are set to n+1
         // to handle the creation of new fish, the aged 0 fish are added to the age 6 fish
         $days = 256;
         while ($days-- > 0) {
             $fish->transform(
-                // decrease the age of each fish by setting the fishCount by rotating the fishCount down one,
-                // spawning (n=age 0 fish) new fish for those aged 6
-                fn (int $c, int $age): int => $fish->get($age + 1 > 8 ? 0 : $age + 1) + (6 === $age
-                        ? $fish->get(0) // add the new fish
+                // decrease the age of each fish by negatively rotating the fishCount down one, e.g. age 1 fish move to age 0 etc…
+                // for age 6 fish we spawn (n) new fish (n) = age 0 fish
+                fn ($c, int $age): int => $fish->get(++$age > 8 ? 0 : $age) + (7 === $age
+                        ? $fish->get(0) // every fish age 0 will spawn a new fish age 8
                         : 0)
             );
         }
