@@ -41,12 +41,12 @@ foreach ($dayGenerator as $day) {
     printf("\e[1;4m%s\e[0m\n", $day->day());
     if (null === $onlyRunPart || 1 === $onlyRunPart) {
         $startTime = microtime(true);
-        printf("    Part1: \e[1;32m%s\e[0m\n", $day->solvePart1());
+        printf("    Part1 \e[1;32m%s\e[0m\n", $day->solvePart1());
         report($startTime);
     }
     if (null === $onlyRunPart || 2 === $onlyRunPart) {
         $startTime = microtime(true);
-        printf("    Part2: \e[1;32m%s\e[0m\n", $day->solvePart2());
+        printf("    Part2 \e[1;32m%s\e[0m\n", $day->solvePart2());
         report($startTime);
     }
 }

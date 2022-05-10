@@ -13,32 +13,39 @@ class Day6 extends DayBehaviour
     {
         $input = array_map('intval', explode(',', $this->input[0]));
 
-        return $this->fishTraverseUsingArray(collect($input), 80);
+        return $this->fishRotate($input, 80);
+    }
+
+    public function solvePart2(): ?int
+    {
+        $input = array_map('intval', explode(',', $this->input[0]));
+
+        return $this->fishRotate($input, 256);
     }
 
     /**
      * This approach works by keeping track of the number of fish of a given age.
      *
-     * @return int|null
+     * @param array<int, int> $input
+     * @param int             $days
+     *
+     * @return int
      */
-    public function solvePart2(): ?int
+    protected function fishRotate(array $input, int $days): int
     {
-        $input = array_map('intval', explode(',', $this->input[0]));
-
         // build a collection of $fish [age => fishCount] key/values, 0-8
         /** @var Collection<array<int, int>> $fish */
         $fish = collect()->pad(9, 0)->replace(array_count_values($input));
 
-        // as each day progresses, the fishCount of age (n) are set to (n)+1
-        // to handle the creation of new fish, the aged 0 fish are added to the age 8 fish
-        $days = 256;
+        // as each day progresses the fishes breeding cycle gets one day closer. We keep track of this using `age`, where
+        // age 2 fishCount becomes age 1 fishCount, age 1 becomes age 0, and the age 0 fish are added to the age 8 fish
         while ($days-- > 0) {
             $fish->transform(
-                // decrease the age of each fish by negatively rotating the fishCount down one, e.g. age 1 fish move to age 0 etc…
-                // for age 6 fish we spawn (n) new fish (n) = age 0 fish
+            // decrease the age of each fish by negatively rotating the fishCount down one, e.g. age 1 fish move to age 0 etc…
+            // for age 6 fish we spawn new fish from age 0
                 fn ($fC, int $age): int => $fish->get(++$age > 8 ? 0 : $age) + (7 === $age
-                    ? $fish->get(0) // every fish age 0 will spawn a new fish age 8
-                    : 0)
+                        ? $fish->get(0) // every fish age 0 will spawn a new fish age 8
+                        : 0)
             );
         }
 
@@ -46,14 +53,14 @@ class Day6 extends DayBehaviour
     }
 
     /**
-     * This method is useful for seeing what happens but is not memory efficient.
+     * This method adds new fish to an array which is useful for seeing what happens but is not memory efficient.
      *
      * @param Collection $fish
      * @param int        $days
      *
      * @return int
      */
-    public function fishTraverseUsingArray(Collection $fish, int $days): int
+    protected function fishTraverseWithFish(Collection $fish, int $days): int
     {
         // printf("day: %d count: %d fish: %s\n", $days, $fish->count(), $fish->join(','));
         if (0 === $days) {
@@ -73,6 +80,6 @@ class Day6 extends DayBehaviour
             })
             ->push(...$append);
 
-        return $this->fishTraverseUsingArray($fish, --$days);
+        return $this->fishTraverseWithFish($fish, --$days);
     }
 }
