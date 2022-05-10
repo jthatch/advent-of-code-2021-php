@@ -32,9 +32,6 @@ class Day7 extends DayBehaviour
 
     /**
      * @param array<int, int> $input
-     * @param callable        $deltaReduce
-     *
-     * @return int
      */
     protected function fuelHistogram(array $input, callable $deltaReduce): int
     {
@@ -44,11 +41,7 @@ class Day7 extends DayBehaviour
 
         return (int) $positions
             // this histogram is based on the sum of all numbers between crab and target position
-            ->map(fn (int $from) => $crabs->reduce(
-            // cache the range sum to save time
-                fn (int $carry, int $to) => $deltaReduce($from, $to) + $carry,
-                0
-            ))
+            ->map(fn (int $from) => $crabs->reduce(fn (int $carry, int $to) => $deltaReduce($from, $to) + $carry, 0))
             ->sort()
             ->first();
     }
