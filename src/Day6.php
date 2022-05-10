@@ -36,7 +36,7 @@ class Day6 extends DayBehaviour
             $fish->transform(
                 // decrease the age of each fish by negatively rotating the fishCount down one, e.g. age 1 fish move to age 0 etc…
                 // for age 6 fish we spawn (n) new fish (n) = age 0 fish
-                fn ($c, int $age): int => $fish->get(++$age > 8 ? 0 : $age) + (7 === $age
+                fn ($fC, int $age): int => $fish->get(++$age > 8 ? 0 : $age) + (7 === $age
                     ? $fish->get(0) // every fish age 0 will spawn a new fish age 8
                     : 0)
             );
