@@ -30,8 +30,43 @@ class Day8 extends DayBehaviour
 
     public function solvePart2(): ?int
     {
-        // TODO: Implement solvePart2() method.
-        return null;
+        $map = [
+            'a' => null,
+            'b' => null,
+            'c' => null,
+            'd' => null,
+            'e' => null,
+            'f' => null,
+            'g' => null,
+        ];
+        $this->input = $this->example();
+        $input       = collect($this->input)
+            // each line comprises of ten unique signal patterns, a | delimiter, and finally the four digit output value
+            ->map(fn (string $line) => explode(' | ', $line))
+            ->mapSpread(fn (string $a, string $b) => [explode(' ', $a, 10), explode(' ', $b, 4)])
+            ->map(function (array $ab): void {
+                $known = collect($ab)->flatten()->filter(fn ($v) => in_array(strlen($v), [2, 4, 3, 7]))->toArray();
+                $f = 1;
+            })
+            // sort the strings so they rank a-z
+            /*->mapSpread(fn (array $a, array $b) => [
+                collect($a)->map(fn ($s) => collect(str_split($s))->sort()->join(''))->toArray(),
+                collect($b)->map(fn ($s) => collect(str_split($s))->sort()->join(''))->toArray(),
+            ])
+            ->mapSpread(fn ($a, $b) =>
+                [
+                    collect($a)->filter(fn($s) => strlen($s) === 2)->toArray(),
+                    collect($b)->filter(fn($s) => strlen($s) === 2)->toArray(),
+                ]
+            )
+            ->mapSpread(fn ($a, $b) =>
+                $f = 1
+            )*/
+        ;
+
+        $foo = 1;
+
+        return (int) $input;
     }
 
     /**
