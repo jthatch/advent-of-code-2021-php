@@ -24,26 +24,23 @@ class Day9 extends DayBehaviour
     public function solvePart1(): ?int
     {
         $heightmap = array_map(static fn (string $s): array => array_map('intval', str_split(trim($s))), $this->input);
+        $lowPoints = [];
 
-        $yMax = count($heightmap);
-        $xMax = count($heightmap[0]);
-        $low  = [];
-
-        for ($y = 0; $y < $yMax; ++$y) {
-            for ($x = 0; $x < $xMax; ++$x) {
+        for ($y = 0, $yMax = count($heightmap); $y < $yMax; ++$y) {
+            for ($x = 0, $xMax = count($heightmap[0]); $x < $xMax; ++$x) {
                 $location = $heightmap[$y][$x];
 
                 // loop over our adjacent positions, if none are bigger then we've found a low point
                 if (empty(array_filter(
                     $this->adjacent,
-                    fn (array $pos) => null !== ($heightmap[$y + $pos[0]][$x + $pos[1]] ?? null) && $location >= $heightmap[$y + $pos[0]][$x + $pos[1]]
+                    fn (array $pos) => ($adjacent = $heightmap[$y + $pos[0]][$x + $pos[1]] ?? null) !== null && $location >= $adjacent
                 ))) {
-                    $low[] = $location;
+                    $lowPoints[] = $location;
                 }
             }
         }
 
-        return collect($low)->reduce(fn (int $c, int $n) => (1 + $n) + $c, 0);
+        return collect($lowPoints)->reduce(fn (int $c, int $n) => (1 + $n) + $c, 0);
     }
 
     public function solvePart2(): ?int
