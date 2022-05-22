@@ -44,7 +44,7 @@ class Day8 extends DayBehaviour
                 $digits[7] = $digitsByLength->get(3)->first();
                 $digits[8] = $digitsByLength->get(7)->first();
 
-                // now work out digits 0, 6 and 9 which share a segment length of 6
+                // now work out digits 9, 0 and 6 which share a segment length of 6
                 $digits[6] = $digitsByLength->get(6)->filter(function ($s) use (&$digits) {
                     // digit 9 has 4 segments in common with digit 4 (b,c,d,f)
                     if (4 === $s->intersect($digits[4])->count()) {
@@ -65,7 +65,7 @@ class Day8 extends DayBehaviour
                 // digit 6 must be whatever remains
                 ->first();
 
-                // finally, work out digits 2, 3 and 5 which share a segment length of 5
+                // finally, work out digits 3, 5 and 2 which share a segment length of 5
                 $digits[2] = $digitsByLength->get(5)->filter(function ($s) use (&$digits) {
                     // digit 3 has 2 segments in common with digit 1 (c,f)
                     if (2 === $s->intersect($digits[1])->count()) {
