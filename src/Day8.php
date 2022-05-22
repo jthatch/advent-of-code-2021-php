@@ -36,7 +36,7 @@ class Day8 extends DayBehaviour
             ->reduce(function (int $carry, array $entry) {
                 [$signal, $output] = $entry;
                 // group digits by segment length
-                $digitsByLength = collect($signal)->flatten()->mapToGroups(fn ($s) => [strlen($s) => collect(str_split($s))->sort()]);
+                $digitsByLength = collect($signal)->mapToGroups(fn ($s) => [strlen($s) => collect(str_split($s))->sort()]);
 
                 // set digits 1,4,7,8 which have unique segment lengths 2,4,3,7 respectively
                 $digits[1] = $digitsByLength->get(2)->first();
@@ -45,48 +45,46 @@ class Day8 extends DayBehaviour
                 $digits[8] = $digitsByLength->get(7)->first();
 
                 // now work out digits 0, 6 and 9 which share a segment length of 6
-                $digits[6] = $digitsByLength->get(6)
-                    ->filter(function ($s) use (&$digits) {
-                        // digit 9 has 4 segments in common with digit 4 (b,c,d,f)
-                        if (4 === $s->intersect($digits[4])->count()) {
-                            $digits[9] = $s;
+                $digits[6] = $digitsByLength->get(6)->filter(function ($s) use (&$digits) {
+                    // digit 9 has 4 segments in common with digit 4 (b,c,d,f)
+                    if (4 === $s->intersect($digits[4])->count()) {
+                        $digits[9] = $s;
 
-                            return false;
-                        }
+                        return false;
+                    }
 
-                        // digit 0 has 2 segments in common with digit 1 (c,f)
-                        if (2 === $s->intersect($digits[1])->count()) {
-                            $digits[0] = $s;
+                    // digit 0 has 2 segments in common with digit 1 (c,f)
+                    if (2 === $s->intersect($digits[1])->count()) {
+                        $digits[0] = $s;
 
-                            return false;
-                        }
+                        return false;
+                    }
 
-                        return true;
-                    })
-                    // digit 6 must be whatever remains
-                    ->first();
+                    return true;
+                })
+                // digit 6 must be whatever remains
+                ->first();
 
                 // finally, work out digits 2, 3 and 5 which share a segment length of 5
-                $digits[2] = $digitsByLength->get(5)
-                    ->filter(function ($s) use (&$digits) {
-                        // digit 3 has 2 segments in common with digit 1 (c,f)
-                        if (2 === $s->intersect($digits[1])->count()) {
-                            $digits[3] = $s;
+                $digits[2] = $digitsByLength->get(5)->filter(function ($s) use (&$digits) {
+                    // digit 3 has 2 segments in common with digit 1 (c,f)
+                    if (2 === $s->intersect($digits[1])->count()) {
+                        $digits[3] = $s;
 
-                            return false;
-                        }
+                        return false;
+                    }
 
-                        // digit 5 has 3 segments in common with digit 4 (b,d,f)
-                        if (3 === $s->intersect($digits[4])->count()) {
-                            $digits[5] = $s;
+                    // digit 5 has 3 segments in common with digit 4 (b,d,f)
+                    if (3 === $s->intersect($digits[4])->count()) {
+                        $digits[5] = $s;
 
-                            return false;
-                        }
+                        return false;
+                    }
 
-                        return true;
-                    })
-                    // finally, digit 2 must be whatever remains
-                    ->first();
+                    return true;
+                })
+                // finally, digit 2 must be whatever remains
+                ->first();
 
                 // remap our digits to [signal -> digit]
                 $digits = collect($digits)->mapWithKeys(fn ($s, $k) => [$s->join('') => $k]);
