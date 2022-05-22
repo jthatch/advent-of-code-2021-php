@@ -17,7 +17,7 @@ class Day9 extends DayBehaviour
     private array $adjacent = [[-1, 0], [0, 1], [1, 0], [0, -1]];
 
     /**
-     * Working with y,x coordinates isn't really collect()'s strong suite, so did this the old-fashioned way.
+     * Working with coordinates isn't really collect()'s strong suit, so did this the old-fashioned way.
      *
      * @return int|null
      */
