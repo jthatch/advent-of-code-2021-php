@@ -10,16 +10,15 @@ class Day8 extends DayBehaviour
 {
     public function solvePart1(): ?int
     {
-        return (int) collect($this->input)
+        return collect($this->input)
             // each line comprises of ten unique signal patterns, a | delimiter, and finally the four digit output value
             ->map(fn (string $line) => explode(' | ', $line))
-            ->mapSpread(fn (string $a, string $b) => [explode(' ', $a, 10), explode(' ', $b, 4)])
             // to solve part1, just return just the $b row (output value)
-            ->map(fn (array $ab) => $ab[1])
+            ->mapSpread(fn (string $a, string $b) => explode(' ', $b, 4))
             // count occurrences of 1,4,7,8 which have string lengths 2,4,3,7 respectively
             ->reduce(
                 fn (int $carry, array $b) => collect($b)->reduce(
-                    fn (int $c, string $v) => (in_array(strlen($v), [2, 4, 3, 7]) ? 1 : 0) + $c,
+                    fn (int $c, string $v) => (int) in_array(strlen($v), [2, 4, 3, 7]) + $c,
                     0
                 ) + $carry,
                 0
@@ -28,24 +27,24 @@ class Day8 extends DayBehaviour
 
     public function solvePart2(): ?int
     {
-        return (int) collect($this->input)
+        return collect($this->input)
             // each line comprises of ten unique signal patterns, a | delimiter, and finally the four digit output value
             ->map(fn (string $line) => explode(' | ', $line))
             // $a = array of signal patterns, $b = array of output values
             ->mapSpread(fn (string $a, string $b) => [explode(' ', $a, 10), explode(' ', $b, 4)])
             ->reduce(function (int $carry, array $entry) {
                 [$signal, $output] = $entry;
-                // group digits by segment length
-                $digitsByLength = collect($signal)->mapToGroups(fn ($s) => [strlen($s) => collect(str_split($s))->sort()]);
+                // group signals by segment length
+                $signalsByLength = collect($signal)->mapToGroups(fn ($s) => [strlen($s) => collect(str_split($s))->sort()]);
 
                 // set digits 1,4,7,8 which have unique segment lengths 2,4,3,7 respectively
-                $digits[1] = $digitsByLength->get(2)->first();
-                $digits[4] = $digitsByLength->get(4)->first();
-                $digits[7] = $digitsByLength->get(3)->first();
-                $digits[8] = $digitsByLength->get(7)->first();
+                $digits[1] = $signalsByLength->get(2)->first();
+                $digits[4] = $signalsByLength->get(4)->first();
+                $digits[7] = $signalsByLength->get(3)->first();
+                $digits[8] = $signalsByLength->get(7)->first();
 
                 // now work out digits 9, 0 and 6 which share a segment length of 6
-                $digits[6] = $digitsByLength->get(6)->filter(function ($s) use (&$digits) {
+                $digits[6] = $signalsByLength->get(6)->filter(function ($s) use (&$digits) {
                     // digit 9 has 4 segments in common with digit 4 (b,c,d,f)
                     if (4 === $s->intersect($digits[4])->count()) {
                         $digits[9] = $s;
@@ -66,7 +65,7 @@ class Day8 extends DayBehaviour
                 ->first();
 
                 // finally, work out digits 3, 5 and 2 which share a segment length of 5
-                $digits[2] = $digitsByLength->get(5)->filter(function ($s) use (&$digits) {
+                $digits[2] = $signalsByLength->get(5)->filter(function ($s) use (&$digits) {
                     // digit 3 has 2 segments in common with digit 1 (c,f)
                     if (2 === $s->intersect($digits[1])->count()) {
                         $digits[3] = $s;
