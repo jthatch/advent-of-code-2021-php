@@ -23,7 +23,7 @@ class Day9 extends DayBehaviour
      */
     public function solvePart1(): ?int
     {
-        $heightmap = array_map(static fn (string $s): array => array_map('intval', str_split(trim($s))), $this->input);
+        $heightmap = array_map(static fn (string $s): array => array_map('intval', str_split($s)), $this->input);
         $lowPoints = [];
 
         for ($y = 0, $yMax = count($heightmap); $y < $yMax; ++$y) {
