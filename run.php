@@ -34,7 +34,7 @@ $dayGenerator = $onlyRunDay
     ? (static fn () => yield DayFactory::create((int) $onlyRunDay))()
     : DayFactory::allAvailableDays();
 
-printf("\033[32m---------------------------------------------------------------------------\n  Advent of Code 2021 PHP - James Thatcher\n---------------------------------------------------------------------------\033[0m\n");
+printf("\e[32m---------------------------------------------\n|\e[0m  Advent of Code 2021 PHP - James Thatcher\e[32m |\n---------------------------------------------\e[0m\n");
 
 /** @var DayInterface $day */
 foreach ($dayGenerator as $day) {
@@ -51,7 +51,7 @@ foreach ($dayGenerator as $day) {
     }
 }
 
-printf("\nTotal time: \e[2m%.5fs\e[0m\n", microtime(true) - $totalStartTime);
+printf("\e[32m---------------------------------------------\n|\e[0m Total time: \e[2m%.5fs\e[0m                     \e[32m |\n---------------------------------------------\e[0m\n", microtime(true) - $totalStartTime);
 
 function report(float $startTime): void
 {
