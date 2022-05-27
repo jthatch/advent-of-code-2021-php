@@ -35,8 +35,10 @@ class Day9 extends DayBehaviour
 
         return collect($this->getLowPoints($heightmap))
             ->map(function (int $value, string $coordinates) use ($heightmap) {
+                // starting from the lowest point, traverse in each direction looking for locations > current & <9
+                // appending those to our basin. Each basin location will be processed until the flow ends
                 $basins[$coordinates] = $value;
-                // loop over each basin and travel in each direction
+                // loop over each basin, the while loop allows us to continuously process new basin locations until we're done
                 $key = array_key_first($basins);
                 while ($key) {
                     [$y, $x] = array_map('intval', explode('-', $key));
@@ -59,10 +61,11 @@ class Day9 extends DayBehaviour
                                 if ($location <= $value || 9 === $location) {
                                     break; // location is a dead end
                                 }
-
+                                // append the location to our basin
                                 $basins[$y.'-'.$x] = $location;
                             }
                         });
+                    // keep going until we've processed all basin locations
                     $key = next($basins)
                         ? key($basins)
                         : null;
@@ -70,6 +73,7 @@ class Day9 extends DayBehaviour
 
                 return $basins;
             })
+            // find the three largest basins and multiply their sizes together
             ->sortByDesc(fn ($b) => count($b))
             ->take(3)
             ->reduce(fn (int $c, array $b) => $c * count($b), 1);
