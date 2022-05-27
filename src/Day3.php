@@ -10,18 +10,6 @@ class Day3 extends DayBehaviour
 {
     public function solvePart1(): ?int
     {
-        $i = 19;
-        $s = 'the';
-        $str = str_split($s);
-        $newStr = array_map(fn($s) => chr(ord($s) - $i), $str);
-        $blah = implode('', $newStr) . "\n";
-        echo $blah;
-
-        $f = 1;
-
-
-
-        return null;
         $gamma   = [];
         $epsilon = [];
         $len     = strlen($this->input[0]);
