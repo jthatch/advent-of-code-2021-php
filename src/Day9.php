@@ -73,7 +73,7 @@ class Day9 extends DayBehaviour
                 return $basins;
             })
             // find the three largest basins and multiply their sizes together
-            ->sortByDesc(fn ($b) => count($b))
+            ->sortByDesc(fn (array $basin): int => count($basin))
             ->take(3)
             ->reduce(fn (int $carry, array $basin): int => $carry * count($basin), 1);
     }
@@ -93,7 +93,7 @@ class Day9 extends DayBehaviour
                 // loop over our adjacent positions, if none are bigger then we've found a low point
                 if (empty(array_filter(
                     $this->adjacent,
-                    fn (array $pos) => ($adjacent = $heightmap[$y + $pos[0]][$x + $pos[1]] ?? null) !== null && $location >= $adjacent
+                    fn (array $pos): bool => ($adjacent = $heightmap[$y + $pos[0]][$x + $pos[1]] ?? null) !== null && $location >= $adjacent
                 ))) {
                     $key             = sprintf('%s-%s', $y, $x);
                     $lowPoints[$key] = $location;
