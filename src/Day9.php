@@ -13,7 +13,7 @@ use App\Contracts\DayBehaviour;
  */
 class Day9 extends DayBehaviour
 {
-    // [[y,x],..] each of the 4 possible adjacent locations, starting top going clockwise
+    // [[y,x],..] each of the 4 possible adjacent locations, starting from top going clockwise
     private array $adjacent = [[-1, 0], [0, 1], [1, 0], [0, -1]];
 
     public function solvePart1(): ?int
