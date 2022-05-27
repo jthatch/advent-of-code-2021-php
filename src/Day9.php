@@ -16,24 +16,19 @@ class Day9 extends DayBehaviour
     // [[y,x],..] each of the 4 possible adjacent locations, starting top going clockwise
     private array $adjacent = [[-1, 0], [0, 1], [1, 0], [0, -1]];
 
-    /**
-     * Working with coordinates isn't really collect()'s strong suit, so did this the old-fashioned way.
-     *
-     * @return int|null
-     */
     public function solvePart1(): ?int
     {
         $heightmap = array_map(static fn (string $s): array => array_map('intval', str_split($s)), $this->input);
 
         return collect($this->getLowPoints($heightmap))
-            ->sum(fn ($n) => ++$n); // return sum of all low points (1 plus height)
+            ->sum(fn (int $height): int => ++$height); // return sum of all low points (1 plus height)
     }
 
     public function solvePart2(): ?int
     {
         $heightmap = array_map(static fn (string $s): array => array_map('intval', str_split($s)), $this->input);
 
-        // store the max bounds of our grid to avoid looking up each time in a double-nested while loop ;)
+        // store the max bounds of our grid to avoid looking up each time in a double-nested while loop
         $yMax = count($heightmap);
         $xMax = count($heightmap[0]);
 
@@ -80,11 +75,11 @@ class Day9 extends DayBehaviour
             // find the three largest basins and multiply their sizes together
             ->sortByDesc(fn ($b) => count($b))
             ->take(3)
-            ->reduce(fn (int $c, array $b) => $c * count($b), 1);
+            ->reduce(fn (int $carry, array $basin): int => $carry * count($basin), 1);
     }
 
     /**
-     * @param array $heightmap
+     * Working with coordinates isn't really collect()'s strong suit, so did this the old-fashioned way.
      *
      * @return array<string, int> $input key in format `y-x`
      */
