@@ -110,10 +110,11 @@ endif
 define DAY_TEMPLATE
 <?php\n\ndeclare(strict_types=1);\n\nnamespace App;\n\nuse App\Contracts\DayBehaviour;\n\nclass Day$(nextDay) extends DayBehaviour\n{\n    public function solvePart1(): ?int\n    {\n        // TODO: Implement solvePart1() method.\n        return null;\n    }\n\n    public function solvePart2(): ?int\n    {\n        // TODO: Implement solvePart2() method.\n        return null;\n    }\n}\n
 endef
-new: ## Generates the next days PHP files
+next: ## Generates the next days PHP files
 ifneq ("$(wildcard src/Day$(nextDay).php)","")
 	@echo -e "The file: src/Day$(nextDay).php already exists...\n"
 else
 	@echo -e "$(DAY_TEMPLATE)" >src/Day$(nextDay).php
 	@echo -e "Created new file: src/Day$(nextDay).php"
 endif
+	make get-input

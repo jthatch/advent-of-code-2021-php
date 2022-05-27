@@ -28,20 +28,14 @@ _Note: checkout the code then run `make run`. The docker and composer libraries 
 **Solve a single part of a days puzzles**  
 `make run day={N} part={N}` e.g. `make run day=16 part=2`
 
-**Create the next days PHP files**  
+**Create the next days PHP file and download puzzle from server**  
 _Auto detects what current Day you are on and will create the next (only if the files don't exist)_
 ```shell
-make new
+make next
 # Created new file: src/Day8.php
-```
-
-**Fetch the next days input from the server.**  
-```shell
-make get-input
 # Fetching latest input using day=8 AOC_COOKIE=53616c7465645f5f539435aCL1P
-./input/day8.txt downloaded
-```  
-_Note: The Makefile reads the [/src](/src) directory to find the most recent DayN.php file. If you had just completed `Day1.php` you would create a `Day2.php` (by running `make new`) and then run this command to fetch `/input/day2.txt`_
+# ./input/day8.txt downloaded
+```
 
 **Use XDebug**  
 `make xdebug`  
