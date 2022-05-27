@@ -33,8 +33,12 @@ class Day9 extends DayBehaviour
     {
         $heightmap = array_map(static fn (string $s): array => array_map('intval', str_split($s)), $this->input);
 
+        // store the max bounds of our grid to avoid looking up each time in a double-nested while loop ;)
+        $yMax = count($heightmap);
+        $xMax = count($heightmap[0]);
+
         return collect($this->getLowPoints($heightmap))
-            ->map(function (int $value, string $coordinates) use ($heightmap) {
+            ->map(function (int $value, string $coordinates) use ($heightmap, $yMax, $xMax) {
                 // starting from the lowest point, traverse in each direction looking for locations > current & <9
                 // appending those to our basin. Each basin location will be processed until the flow ends
                 $basins[$coordinates] = $value;
@@ -43,7 +47,7 @@ class Day9 extends DayBehaviour
                 while ($key) {
                     [$y, $x] = array_map('intval', explode('-', $key));
                     collect($this->adjacent)
-                        ->each(function (array $pos) use ($y, $x, $value, $heightmap, &$basins): void {
+                        ->each(function (array $pos) use ($y, $x, $value, $heightmap, &$basins, $yMax, $xMax): void {
                             while (true) {
                                 // keep travelling in the adjacent direction
                                 $y += $pos[0];
@@ -54,7 +58,7 @@ class Day9 extends DayBehaviour
                                     break;
                                 }
                                 // determine if we hit a wall
-                                if ($y < 0 || $x < 0 || $y > (count($heightmap) - 1) || $x > (count($heightmap[0]) - 1)) {
+                                if ($y < 0 || $x < 0 || $y > ($yMax - 1) || $x > ($xMax - 1)) {
                                     break; // we hit a wall
                                 }
                                 $location = $heightmap[$y][$x];
