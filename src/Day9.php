@@ -65,9 +65,7 @@ class Day9 extends DayBehaviour
                             }
                         });
                     // keep going until we've processed all basin locations
-                    $key = next($basins)
-                        ? key($basins)
-                        : null;
+                    $key = next($basins) ? key($basins) : null;
                 }
 
                 return $basins;
