@@ -18,10 +18,11 @@ $config
         'ordered_imports'            => true,
         'array_syntax'               => ['syntax' => 'short'],
         'declare_strict_types'       => true,
-        'void_return'                => true,
-        'no_superfluous_phpdoc_tags' => false,
+        'void_return'                => false,
+        'no_superfluous_phpdoc_tags' => true,
         'php_unit_method_casing'     => false,
         'protected_to_private'       => false,
+        'native_function_invocation' => false,
     ])
     ->setFinder($finder)
     ->setUsingCache(true)

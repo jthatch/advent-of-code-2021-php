@@ -15,10 +15,6 @@ class DayFactory
     protected const INPUT_FORMAT = __DIR__.'/../input/day%d.txt';
 
     /**
-     * @param int $dayNumber
-     *
-     * @return DayInterface
-     *
      * @throws DayInputNotFoundException|DayClassNotFoundException
      */
     public static function create(int $dayNumber): DayInterface
@@ -49,8 +45,6 @@ class DayFactory
     }
 
     /**
-     * @param int $dayNumber
-     *
      * @return class-string<DayInterface>|string
      */
     private static function getDayClass(int $dayNumber): string

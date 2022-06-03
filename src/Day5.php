@@ -25,7 +25,6 @@ class Day5 extends DayBehaviour
 
     /**
      * @param array<string> $input
-     * @param bool          $removeDiagonals
      *
      * @return Collection<int, non-empty-array<int, int>>
      * @noinspection PrintfScanfArgumentsInspection

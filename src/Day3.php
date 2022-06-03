@@ -54,10 +54,6 @@ class Day3 extends DayBehaviour
 
     /**
      * @param array<int, string> $input
-     * @param bool               $oxygenRatingCriteria
-     * @param int                $position
-     *
-     * @return string
      */
     protected function ratingTraverse(array $input, bool $oxygenRatingCriteria = true, int $position = 0): string
     {

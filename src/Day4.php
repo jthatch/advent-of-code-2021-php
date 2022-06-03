@@ -79,7 +79,6 @@ class Day4 extends DayBehaviour
     /**
      * @param array<int, string> $input
      *
-     * @return array
      * @phpstan-return array<int, array<array<int, array<int>>|int>>
      */
     protected function getNumbersAndBoardFromInput(array $input): array
@@ -115,8 +114,6 @@ class Day4 extends DayBehaviour
 
     /**
      * @param array<int, array<int>> $board
-     *
-     * @return bool
      */
     protected function hasBoardWon(array $board): bool
     {

@@ -37,12 +37,8 @@ class Day7 extends DayBehaviour
 
     /**
      * @param Collection<int, int> $crabs
-     * @param callable             $deltaReduce
-     * @param float|null           $averagePosition
-     *
-     * @return int
      */
-    protected function fuelHistogram(Collection $crabs, callable $deltaReduce, ?float $averagePosition = null): int
+    protected function fuelHistogram(Collection $crabs, callable $deltaReduce, float $averagePosition = null): int
     {
         // if we have an estimated guess use that as it'll save a bunch of cycles, falling back to min/max of crabs
         $positions = $averagePosition

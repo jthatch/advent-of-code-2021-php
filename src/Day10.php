@@ -33,15 +33,19 @@ class Day10 extends DayBehaviour
     public function solvePart2(): ?int
     {
         return (int) collect($this->input)
-            ->map(fn (string $line): array  => $this->parseChunk($line))
-            ->map(fn (array $chunk): ?array => $chunk['errors']->isEmpty() ? collect($chunk['chunk'])->map(fn ($t) => $this->tags[$t])->reverse() : null)
+            ->map(fn (string $line): array       => $this->parseChunk($line))
+            ->map(fn (array $chunk): ?Collection => $chunk['errors']->isEmpty() ? collect($chunk['chunk'])->map(fn ($t) => $this->tags[$t])->reverse() : null)
             ->filter()
-            ->map(fn ($chunk) => $chunk->reduce(fn ($c, $t) => (5 * $c) + match ($t) {')' => 1, ']' => 2, '}' => 3, '>' => 4,}, 0))
+            ->map(fn ($chunk) => $chunk->reduce(fn ($c, $t) => (5 * $c) + match ($t) {
+                ')'           => 1,
+                ']'           => 2,
+                '}'           => 3,
+                '>'           => 4,
+            }, 0))
             ->median();
     }
 
     /**
-     * @param string $line
      * @return array{chunk: array, errors: Collection}
      */
     protected function parseChunk(string $line): array

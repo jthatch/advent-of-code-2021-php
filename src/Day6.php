@@ -27,9 +27,6 @@ class Day6 extends DayBehaviour
      * This approach works by keeping track of the number of fish of a given age.
      *
      * @param array<int, int> $input
-     * @param int             $days
-     *
-     * @return int
      */
     protected function fishRotate(array $input, int $days): int
     {
@@ -54,11 +51,6 @@ class Day6 extends DayBehaviour
 
     /**
      * This method adds new fish to an array which is useful for seeing what happens but is not memory efficient.
-     *
-     * @param Collection $fish
-     * @param int        $days
-     *
-     * @return int
      */
     protected function fishTraverseWithFish(Collection $fish, int $days): int
     {

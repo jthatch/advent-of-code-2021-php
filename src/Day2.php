@@ -12,8 +12,6 @@ class Day2 extends DayBehaviour
      *  Refactored this using collect, which seems a few orders of magnitude slower :(
      *  Mem[616kb] Peak[ 1013kb] Time[0.06339s]   <-- Using collect()
      *  Mem[422kb] Peak[  925kb] Time[0.00072s]   <-- Using commented out array functionality.
-     *
-     * @return int|null
      */
     public function solvePart1(): ?int
     {

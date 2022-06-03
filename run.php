@@ -34,7 +34,12 @@ $dayGenerator = $onlyRunDay
     ? (static fn () => yield DayFactory::create((int) $onlyRunDay))()
     : DayFactory::allAvailableDays();
 
-printf("\e[32m---------------------------------------------\n|\e[0m  Advent of Code 2021 PHP - James Thatcher\e[32m |\n---------------------------------------------\e[0m\n");
+printf(<<<eof
+\e[32m---------------------------------------------
+|\e[0m  Advent of Code 2021 PHP - James Thatcher\e[32m |
+---------------------------------------------\e[0m
+
+eof);
 
 /** @var DayInterface $day */
 foreach ($dayGenerator as $day) {
@@ -51,7 +56,12 @@ foreach ($dayGenerator as $day) {
     }
 }
 
-printf("\e[32m---------------------------------------------\n|\e[0m Total time: \e[2m%.5fs\e[0m                     \e[32m |\n---------------------------------------------\e[0m\n", microtime(true) - $totalStartTime);
+printf(<<<eof
+\e[32m---------------------------------------------
+|\e[0m Total time: \e[2m%.5fs\e[0m                     \e[32m |
+---------------------------------------------\e[0m
+
+eof, microtime(true) - $totalStartTime);
 
 function report(float $startTime): void
 {
@@ -65,7 +75,7 @@ function report(float $startTime): void
     };
     $memColourised = match (true) {
         $mem >= 1000000 => sprintf("\e[0;31m% 5s\e[0;2m", str_pad(humanReadableBytes($mem), 5)),
-        $mem >= 500000  => sprintf("\e[1;31m% 5s\e[0;2m", str_pad(humanReadableBytes($mem), 5)),
+        $mem >= 750000  => sprintf("\e[1;31m% 5s\e[0;2m", str_pad(humanReadableBytes($mem), 5)),
         default         => sprintf('% 5s', str_pad(humanReadableBytes($mem), 5)),
     };
 
@@ -83,13 +93,13 @@ function report(float $startTime): void
     );
 }
 
-function humanReadableBytes(int $bytes, ?int $precision = null): string
+function humanReadableBytes(int $bytes, int $precision = null): string
 {
     $units          = ['b', 'kb', 'mb', 'gb', 'tb', 'pb', 'eb', 'zb', 'yb'];
     $precisionUnits = [0, 0, 1, 2, 2, 3, 3, 4, 4];
 
     return round(
         $bytes / (1024 ** ($i = floor(log($bytes, 1024)))),
-        is_null($precision) ? $precisionUnits[$i] : $precision
+        $precision ?? $precisionUnits[$i]
     ).$units[$i];
 }
