@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App;
 
 use App\Contracts\DayBehaviour;
+use App\Day11\Octopus;
+use Illuminate\Support\Collection;
 
 class Day11 extends DayBehaviour
 {
@@ -13,12 +15,58 @@ class Day11 extends DayBehaviour
 
     public function solvePart1(): ?int
     {
+        $octopuses = $this->mapToOctopuses($this->input);
+
+        $totalFlashes = 0;
+        foreach (range(1, 100) as $i) {
+            $totalFlashes += $octopuses->reduce(fn (int $c, Octopus $octopus) => $c + $octopus->energise(), 0);
+            $octopuses->each(fn (Octopus $octopus) => $octopus->cooldown());
+        }
+
+        return $totalFlashes;
+    }
+
+    public function solvePart2(): ?int
+    {
+        $octopuses = $this->mapToOctopuses($this->input);
+
+        $allFlashCount = $octopuses->count();
+        $stepCount     = 0;
+        do {
+            ++$stepCount;
+            $octopuses->each(fn (Octopus $octopus) => $octopus->cooldown());
+        } while ($allFlashCount !== $octopuses->reduce(fn (int $c, Octopus $octopus) => $c + $octopus->energise(), 0));
+
+        return $stepCount;
+    }
+
+    protected function mapToOctopuses(array $input): Collection
+    {
+        // map to [y][x] grid
+        $octopuses = collect($input)
+            ->map(fn (string $row) => str_split($row))
+            ->flatMap(fn (array $row, int $y) => [
+                $y => collect($row)->flatMap(fn (int $energy, int $x) => [
+                    $x => new Octopus($energy),
+                ]),
+            ]);
+
+        // reorient to a flat list and assign octopus neighbours
+        return $octopuses
+            ->each(fn (Collection $row, int $y) => $row->each(fn (Octopus $octopus, int $x) => $octopus->neighbours = collect($this->adjacent)
+                ->filter(fn (array $pos) => isset($octopuses[$y + $pos[0]][$x + $pos[1]]))
+                ->map(fn (array $pos)    => $octopuses[$y + $pos[0]][$x + $pos[1]])))
+            ->flatten();
+    }
+
+    public function solvePart1Old(): ?int
+    {
         $octopuses = array_map(static fn (string $s): array => array_map('intval', str_split($s)), $this->input);
 
         return $this->step($octopuses, 100);
     }
 
-    public function solvePart2(): ?int
+    public function solvePart2Old(): ?int
     {
         $octopuses = array_map(static fn (string $s): array => array_map('intval', str_split($s)), $this->input);
 
