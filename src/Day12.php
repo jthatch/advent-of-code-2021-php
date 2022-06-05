@@ -14,20 +14,18 @@ class Day12 extends DayBehaviour
     {
         $caves = $this->mapToCaves($this->input);
 
-        return $caves
+        return (int) $caves
             ->get('start')
-            ->traverse()
-            ->count();
+            ->traverse();
     }
 
     public function solvePart2(): ?int
     {
         $caves = $this->mapToCaves($this->input);
 
-        return $caves
+        return (int) $caves
             ->get('start')
-            ->traverse(visitSmallCaveTwice: true)
-            ->count();
+            ->traverse(visitSmallCaveTwice: true);
     }
 
     /**

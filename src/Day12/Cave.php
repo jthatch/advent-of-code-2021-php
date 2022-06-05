@@ -24,26 +24,30 @@ class Cave
         $this->isSmall = ctype_lower($name) && !$this->isStart && !$this->isEnd;
     }
 
-    public function traverse(Collection $totalPaths = new Collection(), array $paths = [], bool $visitSmallCaveTwice = false): Collection
+    public function traverse(int $totalPaths = 0, array $paths = [], bool $visitSmallCaveTwice = false): int
     {
         $paths[] = $this->name;
 
         if ($this->isEnd) {
-            $totalPaths->push($paths);
-
-            return $totalPaths;
+            return ++$totalPaths;
         }
 
-        if ($visitSmallCaveTwice) {
-            $smallCavesSeenTwice = collect(array_count_values($paths))->filter(fn ($c, $n) => $this->isSmallCave($n) && $c > 1)->isNotEmpty();
-            $adjacent = $this->adjacent
-                ->reject(static fn (Cave $cave): bool => $cave->isStart || ($cave->isSmall && in_array($cave->name, $paths, true) && $smallCavesSeenTwice));
+        if ($visitSmallCaveTwice) { // refactored without collect() for speed optimisations (2x faster)
+            $smallCavesSeenTwice = !empty(array_filter(array_count_values($paths), fn ($c, $n) => $this->isSmallCave($n) && $c > 1, ARRAY_FILTER_USE_BOTH));
+            foreach ($this->adjacent as $cave) {
+                if ($cave->isStart || ($cave->isSmall && in_array($cave->name, $paths, true) && $smallCavesSeenTwice)) {
+                    continue;
+                }
+
+                $totalPaths = $cave->traverse($totalPaths, $paths, $visitSmallCaveTwice);
+            }
         } else {
-            $adjacent = $this->adjacent
-                ->reject(static fn (Cave $cave): bool => !$cave->isUpper && in_array($cave->name, $paths, true));
+            $this->adjacent
+                ->reject(static fn (Cave $cave): bool => !$cave->isUpper && in_array($cave->name, $paths, true))
+                ->each(static function (Cave $cave) use (&$totalPaths, $paths, $visitSmallCaveTwice) {
+                    $totalPaths = $cave->traverse($totalPaths, $paths, $visitSmallCaveTwice);
+                });
         }
-
-        $adjacent->each(static fn (Cave $cave): Collection => $cave->traverse($totalPaths, $paths, $visitSmallCaveTwice));
 
         return $totalPaths;
     }
