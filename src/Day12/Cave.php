@@ -24,7 +24,7 @@ class Cave
         $this->isSmall = ctype_lower($name) && !$this->isStart && !$this->isEnd;
     }
 
-    public function traverse(int $totalPaths = 0, array $paths = [], bool $visitSmallCaveTwice = false, ?bool $smallCavesSeenTwice = null): int
+    public function traverse(int $totalPaths = 0, array $paths = [], bool $visitSmallCaveTwice = false, bool $smallCavesSeenTwice = false): int
     {
         if ($this->isEnd) {
             return ++$totalPaths;
@@ -32,25 +32,17 @@ class Cave
 
         $paths[] = $this->name;
 
+        // this is the most expensive code (apart from collect stuff below lol) so once true we avoid re-calculating and pass to subsequent traverse()'s as an argument
         if ($visitSmallCaveTwice && !$smallCavesSeenTwice) {
-            // a 2x speed optimisation to avoid re-calculating if it returns true.
-            $smallCavesSeenTwice = !empty(array_filter(array_count_values($paths), fn ($c, $n) => $c > 1 && $this->isSmallCave($n), ARRAY_FILTER_USE_BOTH));
+            $smallCavesSeenTwice = !empty(array_filter(array_count_values($paths), fn (int $c, string $n): bool => $c > 1 && $this->isSmallCave($n), ARRAY_FILTER_USE_BOTH));
         }
 
-        return $this->adjacent
-            ->when(
-                $visitSmallCaveTwice, // part 2
-                fn (Collection $adjacent) => $adjacent->reject(
-                    fn (Cave $cave): bool => $cave->isStart || ($cave->isSmall && $smallCavesSeenTwice && in_array($cave->name, $paths, true)),
-                )
-            )
-            ->when(
-                !$visitSmallCaveTwice, // part 1
-                fn (Collection $adjacent) => $adjacent->reject(
-                    fn (Cave $cave): bool => !$cave->isUpper && in_array($cave->name, $paths, true)
-                )
-            )
-            ->reduce(fn (int $carry, Cave $cave): int => $carry + $cave->traverse($totalPaths, $paths, $visitSmallCaveTwice, $smallCavesSeenTwice), 0);
+        return (!$visitSmallCaveTwice // using ternary instead of collect's when() is much faster.
+            ? $this->adjacent // part 1
+                ->reject(fn (Cave $cave): bool => !$cave->isUpper && in_array($cave->name, $paths, true))
+            : $this->adjacent // part 2
+                ->reject(fn (Cave $cave): bool => $cave->isStart || ($cave->isSmall && $smallCavesSeenTwice && in_array($cave->name, $paths, true)))
+        )->reduce(fn (int $carry, Cave $cave): int => $carry + $cave->traverse($totalPaths, $paths, $visitSmallCaveTwice, $smallCavesSeenTwice), 0);
     }
 
     protected function isSmallCave(string $name): bool
