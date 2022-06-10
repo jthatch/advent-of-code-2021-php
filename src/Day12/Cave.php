@@ -24,7 +24,7 @@ class Cave
         $this->isSmall = ctype_lower($name) && !$this->isStart && !$this->isEnd;
     }
 
-    public function traverse(int $totalPaths = 0, array $paths = [], bool $visitSmallCaveTwice = false): int
+    public function traverse(int $totalPaths = 0, array $paths = [], bool $visitSmallCaveTwice = false, ?bool $smallCavesSeenTwice = null): int
     {
         if ($this->isEnd) {
             return ++$totalPaths;
@@ -32,22 +32,25 @@ class Cave
 
         $paths[] = $this->name;
 
-        if ($visitSmallCaveTwice) { // refactored without collect() for speed optimisations (2x faster)
+        if ($visitSmallCaveTwice && !$smallCavesSeenTwice) {
+            // a 2x speed optimisation to avoid re-calculating if it returns true.
             $smallCavesSeenTwice = !empty(array_filter(array_count_values($paths), fn ($c, $n) => $c > 1 && $this->isSmallCave($n), ARRAY_FILTER_USE_BOTH));
-            foreach ($this->adjacent as $cave) {
-                if ($cave->isStart || ($cave->isSmall && $smallCavesSeenTwice && in_array($cave->name, $paths, true))) {
-                    continue;
-                }
-
-                $totalPaths = $cave->traverse($totalPaths, $paths, $visitSmallCaveTwice);
-            }
-        } else {
-            $totalPaths += $this->adjacent
-                ->reject(fn (Cave $cave): bool => !$cave->isUpper && in_array($cave->name, $paths, true))
-                ->reduce(fn (int $carry, Cave $cave): int => $carry + $cave->traverse($totalPaths, $paths, $visitSmallCaveTwice), 0);
         }
 
-        return $totalPaths;
+        return $this->adjacent
+            ->when(
+                $visitSmallCaveTwice, // part 2
+                fn (Collection $adjacent) => $adjacent->reject(
+                    fn (Cave $cave): bool => $cave->isStart || ($cave->isSmall && $smallCavesSeenTwice && in_array($cave->name, $paths, true)),
+                )
+            )
+            ->when(
+                !$visitSmallCaveTwice, // part 1
+                fn (Collection $adjacent) => $adjacent->reject(
+                    fn (Cave $cave): bool => !$cave->isUpper && in_array($cave->name, $paths, true)
+                )
+            )
+            ->reduce(fn (int $carry, Cave $cave): int => $carry + $cave->traverse($totalPaths, $paths, $visitSmallCaveTwice, $smallCavesSeenTwice), 0);
     }
 
     protected function isSmallCave(string $name): bool
