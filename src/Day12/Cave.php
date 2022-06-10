@@ -42,11 +42,9 @@ class Cave
                 $totalPaths = $cave->traverse($totalPaths, $paths, $visitSmallCaveTwice);
             }
         } else {
-            $this->adjacent
-                ->reject(static fn (Cave $cave): bool => !$cave->isUpper && in_array($cave->name, $paths, true))
-                ->each(static function (Cave $cave) use (&$totalPaths, $paths, $visitSmallCaveTwice) {
-                    $totalPaths = $cave->traverse($totalPaths, $paths, $visitSmallCaveTwice);
-                });
+            $totalPaths += $this->adjacent
+                ->reject(fn (Cave $cave): bool => !$cave->isUpper && in_array($cave->name, $paths, true))
+                ->reduce(fn (int $carry, Cave $cave): int => $carry + $cave->traverse($totalPaths, $paths, $visitSmallCaveTwice), 0);
         }
 
         return $totalPaths;
