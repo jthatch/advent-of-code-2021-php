@@ -26,16 +26,16 @@ class Cave
 
     public function traverse(int $totalPaths = 0, array $paths = [], bool $visitSmallCaveTwice = false): int
     {
-        $paths[] = $this->name;
-
         if ($this->isEnd) {
             return ++$totalPaths;
         }
 
+        $paths[] = $this->name;
+
         if ($visitSmallCaveTwice) { // refactored without collect() for speed optimisations (2x faster)
-            $smallCavesSeenTwice = !empty(array_filter(array_count_values($paths), fn ($c, $n) => $this->isSmallCave($n) && $c > 1, ARRAY_FILTER_USE_BOTH));
+            $smallCavesSeenTwice = !empty(array_filter(array_count_values($paths), fn ($c, $n) => $c > 1 && $this->isSmallCave($n), ARRAY_FILTER_USE_BOTH));
             foreach ($this->adjacent as $cave) {
-                if ($cave->isStart || ($cave->isSmall && in_array($cave->name, $paths, true) && $smallCavesSeenTwice)) {
+                if ($cave->isStart || ($cave->isSmall && $smallCavesSeenTwice && in_array($cave->name, $paths, true))) {
                     continue;
                 }
 
