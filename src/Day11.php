@@ -59,6 +59,9 @@ class Day11 extends DayBehaviour
             ->flatten();
     }
 
+    /**
+     * @deprecated
+     */
     public function solvePart1Old(): ?int
     {
         $octopuses = array_map(static fn (string $s): array => array_map('intval', str_split($s)), $this->input);
@@ -66,6 +69,9 @@ class Day11 extends DayBehaviour
         return $this->step($octopuses, 100);
     }
 
+    /**
+     * @deprecated
+     */
     public function solvePart2Old(): ?int
     {
         $octopuses = array_map(static fn (string $s): array => array_map('intval', str_split($s)), $this->input);
@@ -75,6 +81,9 @@ class Day11 extends DayBehaviour
         return $this->step($octopuses, PHP_INT_MAX, $detectSimultaneousFlash);
     }
 
+    /**
+     * @deprecated
+     */
     protected function step(array $octopuses, int $steps, ?callable $breakAfterStep = null): int
     {
         $totalFlashes = 0;
