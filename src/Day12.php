@@ -14,7 +14,7 @@ class Day12 extends DayBehaviour
     {
         $caves = $this->mapToCaves($this->input);
 
-        return (int) $caves
+        return $caves
             ->get('start')
             ->traverse();
     }
@@ -23,7 +23,7 @@ class Day12 extends DayBehaviour
     {
         $caves = $this->mapToCaves($this->input);
 
-        return (int) $caves
+        return $caves
             ->get('start')
             ->traverse(visitSmallCaveTwice: true);
     }
@@ -45,52 +45,5 @@ class Day12 extends DayBehaviour
             });
 
         return $caves;
-    }
-
-    protected function example(): array
-    {
-        $example1 = <<<eof
-start-A
-start-b
-A-c
-A-b
-b-d
-A-end
-b-end
-eof;
-        $example2 = <<<eof
-dc-end
-HN-start
-start-kj
-dc-start
-dc-HN
-LN-dc
-HN-end
-kj-sa
-kj-HN
-kj-dc
-eof;
-        $example3 = <<<eof
-fs-end
-he-DX
-fs-he
-start-DX
-pj-DX
-end-zg
-zg-sl
-zg-pj
-pj-he
-RW-he
-fs-DX
-pj-RW
-zg-RW
-start-pj
-he-WI
-zg-he
-pj-fs
-start-RW
-eof;
-
-        return explode("\n", $example2);
     }
 }
