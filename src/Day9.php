@@ -47,9 +47,8 @@ class Day9 extends DayBehaviour
                                 // keep travelling in the adjacent direction
                                 $y += $pos[0];
                                 $x += $pos[1];
-                                $key = sprintf('%s-%s', $y, $x);
                                 // determine if we've seen this basin already
-                                if (isset($basins[$key])) {
+                                if (isset($basins[$y.'-'.$x])) {
                                     break;
                                 }
                                 // determine if we hit a wall
