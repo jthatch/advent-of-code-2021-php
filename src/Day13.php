@@ -81,7 +81,7 @@ class Day13 extends DayBehaviour
                 $max = $max->toArray();
                 ++$max['y'];
                 ++$max['x'];
-                $grid = collect()->pad($max['y'], array_fill(0, $max['x'], '.'))->replaceRecursive($grid)->all();
+                $grid = collect()->pad($max['y'], array_fill(0, $max['x'], '.'))->replaceRecursive($grid);
             } elseif (str_contains($line, 'fold along')) { // finally build up a list of "folds" we must make
                 $line               = str_replace('fold along ', '', $line);
                 [$axis, $foldPoint] = explode('=', $line);
@@ -90,7 +90,7 @@ class Day13 extends DayBehaviour
         });
 
         return [
-            collect($grid),
+            $grid,
             $folds,
         ];
     }
