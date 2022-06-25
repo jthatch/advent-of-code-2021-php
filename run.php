@@ -7,12 +7,16 @@
  * Examples:
  * Run all days:
  * php run.php
+ * 
+ * Run Days 1-5 & 9
+ * php run.php 1-5,9
  *
  * Run Day 10 part 1 & 2:
  * php run.php 10
  *
- * Run day 7 part 2:
- * php run.php 7 2
+ * Run Days 6 & 7 part 2:
+ * php run.php 6,7 2
+ * 
  */
 declare(strict_types=1);
 
@@ -22,16 +26,23 @@ use App\DayFactory;
 $totalStartTime = microtime(true);
 require 'vendor/autoload.php';
 
-$onlyRunDay  = $argv[1]        ?? null;
+// extract days from comma-seperated and ranged list (e.g. "1-3,5" would result in [1,2,3,5])
+$onlyRunDays  = $argv[1] ?? null
+    ? array_reverse(array_merge([], ...array_map(fn(string $dayChunk) => (str_contains($dayChunk, '-') && [$start, $end] = sscanf($dayChunk, '%d-%d')) ? range($start, $end) : [$dayChunk], explode(',', $argv[1]))))
+    : null;
 $onlyRunPart = match ($argv[2] ?? null) {
     '1', '2' => (int) $argv[2],
     default => null,
 };
 
-// If a day is passed on the command line, e.g. `php run.php 1` our generator returns that single day,
-// otherwise returns all days that we have solved
-$dayGenerator = $onlyRunDay
-    ? (static fn () => yield DayFactory::create((int) $onlyRunDay))()
+// If days are passed on the command line, e.g. `php run.php 1` or `php run.php 1-5,6` our generator returns those days,
+// otherwise returns all days that have been solved.
+$dayGenerator = $onlyRunDays
+    ? (function () use (&$onlyRunDays) { 
+        while(!empty($onlyRunDays)) { 
+            yield DayFactory::create((int) array_pop($onlyRunDays));
+        }
+    })()
     : DayFactory::allAvailableDays();
 
 printf(<<<eof

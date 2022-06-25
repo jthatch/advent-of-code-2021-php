@@ -26,6 +26,9 @@ _Note: checkout the code then run `make run`. The docker and composer libraries 
 **Solve an individual days puzzles**  
 `make run day={N}` e.g. `make run day=13`
 
+**Solve multiple days puzzles**  
+`make run day={N},{N1}-{N2}...` e.g. `make run day=1-5,7,10,10,10` _Runs days 1-5, 7 and 10 3 times_
+
 **Solve a single part of a days puzzles**  
 `make run day={N} part={N}` e.g. `make run day=16 part=2`
 
